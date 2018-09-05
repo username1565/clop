@@ -10,7 +10,7 @@
 	#include <sys/utsname.h>
 #endif
 
-#define VERSION "1.02"
+#define VERSION "1.03"
 
 #ifdef _WIN64
     const char* OS = "Windows 64-bit";
@@ -37,7 +37,7 @@ const uint64_t minPrime = 3;
 const uint64_t maxPrime = UINT64_MAX;
 
 struct timeb starttime, endtime;
-FILE * fout, * frep, * fchk;
+FILE * fout, * fchk;
 
 // 8GB обмеження по пам'яті
 uint32_t maxBlockSize = 1024 * 1024 * 1024, blockSize = 100000, bSize = 0;
@@ -181,8 +181,9 @@ void print_usage(void)
     fprintf(stderr, "\t<low>\t\tlower border\n");
     fprintf(stderr, "\t<high>\t\thigher border\n");
     fprintf(stderr, "The following switches are accepted:\n");
-    fprintf(stderr, "\t-p\t\tdisplay progress bar\n");
-    fprintf(stderr, "\t-o\t\twrite results to output file\n");
+    fprintf(stderr, "\t--p\t\tdisplay progress bar\n");
+    fprintf(stderr, "\t--o\t\twrite results to output file\n");
+    fprintf(stderr, "\t-o [fn]\t\twrite results to [fn] file\n");
     fprintf(stderr, "\t-f [s]\t\tfactoring block size (default value: %" PRIu32 ")\n", blockSize);
 }
 
@@ -195,7 +196,7 @@ int main(int argc, char** argv)
 	if(uname(&name)) exit(EXIT_FAILURE);
 	sprintf(OS, "%s %s", name.sysname, name.release);
 #endif // __linux__
-    fprintf(stderr, "Consecutive List Of Primes, %s (%s)\nCopyright 2018, Alexander Belogourov aka x3mEn\n\n", VERSION, OS);
+    fprintf(stderr, "CLOP (Consecutive List Of Primes) %s (%s)\nCopyright 2018, Alexander Belogourov aka x3mEn\n\n", VERSION, OS);
     if (argc < 3) {
         print_usage();
         exit(EXIT_FAILURE);
@@ -208,9 +209,14 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
+    sprintf(outfname, "out_%019" PRIu64 "_%019" PRIu64, taskIni, taskFin);
+    sprintf(chkfname, "chk_%019" PRIu64 "_%019" PRIu64, taskIni, taskFin);
+
     for (int i = 3; i < argc; i++) {
-        if (!strcmp(argv[i],"-p")) {progress = 1; continue;}
+        if (!strcmp(argv[i],"--p")) {progress = 1; continue;}
+        if (!strcmp(argv[i],"--o")) {output = 1; continue;}
         if (!strcmp(argv[i],"-o")) {output = 1; continue;}
+        if (argv[i][1] != '-' && !strcmp(argv[i-1],"-o")) {sprintf(outfname, argv[i]); continue;}
         if (!strcmp(argv[i],"-f")) {continue;}
         if (string_to_u64(argv[i]) && !strcmp(argv[i-1],"-f")) {blockSize = min(maxBlockSize, string_to_u64(argv[i])); continue;}
         print_usage();
@@ -225,9 +231,6 @@ int main(int argc, char** argv)
     time(&timer);
     tm_info = localtime(&timer);
     strftime(curdatetime, 26, "%d.%m.%Y %H:%M:%S", tm_info);
-
-    sprintf(outfname, "out_%019" PRIu64 "_%019" PRIu64, taskIni, taskFin);
-    sprintf(chkfname, "chk_%019" PRIu64 "_%019" PRIu64, taskIni, taskFin);
 
     int ErrorCode, CheckPointCode;
     ErrorCode = CheckPointCode = read_checkpoint();
@@ -283,13 +286,13 @@ int main(int argc, char** argv)
         for (uint64_t i = 0; i < bSize * Step; i += 2) {
             if (!(Block[i >> 7]&((uint64_t)1 << ((i >> 1) & 63)))) {
                 toCnt++;
-				if (output) fprintf(fout, "%" PRIu64 "\n", Cur + i);
-			}
-		}
+                if (output) fprintf(fout, "%" PRIu64 "\n", Cur + i);
+            }
+        }
 		bStep = (Last - Ini) / Step + 1;
 		cpcnt = (int)((double)bStep / total * cstep);
 		if (ctpcnt != cpcnt) {
-			ctpcnt = cpcnt;
+            ctpcnt = cpcnt;
 			if (progress)
 				do_progress((double)bStep / total * 100);
 			save_checkpoint(Last + 1);
