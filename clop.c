@@ -181,8 +181,7 @@ void print_usage(void)
     fprintf(stderr, "\t<low>\t\tlower border\n");
     fprintf(stderr, "\t<high>\t\thigher border\n");
     fprintf(stderr, "The following switches are accepted:\n");
-    fprintf(stderr, "\t--p\t\tdisplay progress bar\n");
-    fprintf(stderr, "\t--o\t\twrite results to output file\n");
+    fprintf(stderr, "\t-p\t\tdisplay progress bar\n");
     fprintf(stderr, "\t-o [fn]\t\twrite results to [fn] file\n");
     fprintf(stderr, "\t-f [s]\t\tfactoring block size (default value: %" PRIu32 ")\n", blockSize);
 }
@@ -213,10 +212,9 @@ int main(int argc, char** argv)
     sprintf(chkfname, "chk_%019" PRIu64 "_%019" PRIu64, taskIni, taskFin);
 
     for (int i = 3; i < argc; i++) {
-        if (!strcmp(argv[i],"--p")) {progress = 1; continue;}
-        if (!strcmp(argv[i],"--o")) {output = 1; continue;}
+        if (!strcmp(argv[i],"-p")) {progress = 1; continue;}
         if (!strcmp(argv[i],"-o")) {output = 1; continue;}
-        if (argv[i][1] != '-' && !strcmp(argv[i-1],"-o")) {sprintf(outfname, argv[i]); continue;}
+        if (argv[i][0] != '-' && !strcmp(argv[i-1],"-o")) {sprintf(outfname, argv[i]); continue;}
         if (!strcmp(argv[i],"-f")) {continue;}
         if (string_to_u64(argv[i]) && !strcmp(argv[i-1],"-f")) {blockSize = min(maxBlockSize, string_to_u64(argv[i])); continue;}
         print_usage();

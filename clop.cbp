@@ -11,13 +11,13 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="1 22801763489 -p -o -f 10000000000" />
+				<Option parameters="2000000000000 2001000000000 -o -p -f 10000000" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/clop" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/clop_$(version)_windows_x86_64" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -26,6 +26,9 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Environment>
+				<Variable name="version" value="1.03" />
+			</Environment>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
