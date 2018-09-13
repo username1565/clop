@@ -1,0 +1,37 @@
+To compile this as win64 executable for Windows, just use GCC compiler:
+   >gcc -o clop.exe clop.c
+
+But in win32, x86 you can see this: https://www.computerhope.com/issues/pictures/not-a-valid-win32-application.jpg
+
+So to do compilation clop.c as win32 executable - just use "-m32" key:
+   >gcc -m32 -o clop.exe clop.c
+
+Also, I see this program have name a clop. "Клоп" in russian sounds disgustingly like a "bug", "crum".
+But programming language of this is C.
+So I think "cyclop" will be good name for this program...
+
+	- Cyclop multi-icon ico-file - added.
+
+	To add icon when compile - just follow this manual: https://fragglet.livejournal.com/4448.html
+	This page on livejournal not opening correctly sometimes, so I'll write instructions here:
+      Step 1. Need to create .rc file with contents:
+         'MAINICON ICON "cyclop.ico"'
+         or
+         '1 ICON "cyclop.ico"'
+         (one string without right whitespaces and without left and right single quotes).
+      Step 2. Create .o file using windress. See -h, set -F. For win32 (x32) format must be pei-i38
+         >windres -F pei-i38 6 cyclop.rc cyclop.o
+      Step 3. After creating .o file - just compile .c-file with .o file - using gcc:
+         >gcc -m32 clop.c cyclop.o -o cyclop_win32.exe
+      ____________________________________________________________________________
+      for win64, linux, etc. Maybe need to set another formats (-F) in windres when creating -o file. See "windress -h".
+
+How to make multi-icon ico-file?
+   1. Go here: https://username1565.github.io/MultiCoin-paperwallet/index_files/static/avatars/docs/index.html
+   2. Upload any picture, and create square avatar with size 256x256 pixels.
+   3. Download avatar as image (right click on picture -> Save as...).
+   4. Upload this picture - here: https://convertico.com/ and download your multi icon ico-file.
+      This file is multi-icon and contains 6 icons with resolutions: 16x16, 32x32, 48x48, 64x64, 128x128, 256x256.
+   5. You can check is this multi-icon here (Just upload ico there): https://redketchup.io/icon/edit
+   
+Best regards.
