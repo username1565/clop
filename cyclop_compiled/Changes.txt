@@ -1,0 +1,10 @@
+1. Multiple parts supporting - added. Filename changing according -n value. Added separate file to write first_and_last prime list.
+2. More arguments - added. Run without arguments to see this.
+3. Added system("pause"); to prevent closing window if double click on exe.
+4. Check file function - added and this return structure for each part.
+5. Added autocheck files if this contains primes.
+6. Added separate writting, if some parts contains prime numbers.
+7. Supporting the restoring separate damaged or deleted part, using previous command.
+8. Code commented for understanding, test functions added and disabled.
+9. Delimiters - added. You can set this by char code. See "usage info".
+10. Multiicon ico-file - added. Compiled versions - added. Now this is Cyclop. C-CLOP.

@@ -1,0 +1,63 @@
+To compile this as win64 executable for Windows, just use GCC compiler:
+   >gcc -o clop.exe clop.c
+
+But in win32, x86 you can see this: https://www.computerhope.com/issues/pictures/not-a-valid-win32-application.jpg
+
+So to compile clop.c as win32 executable - just use "-m32" key:
+   >gcc -m32 -o clop.exe clop.c
+
+Also, I see this program have name a clop. "Клоп" in russian sounds disgustingly like a "bug", "crum".
+But programming language of this is C.
+So I think "cyclop" will be good name for this program...
+
+   Cyclop multi-icon added.
+
+To add icon when compiled - just follow this manual: https://fragglet.livejournal.com/4448.html
+UPD2:
+   This page on livejournal not opening correctly sometimes, so I'll write instructions here:
+      1. Need to create .rc file with contents:
+         'MAINICON ICON "cyclop.ico"'
+         or
+         '1 ICON "cyclop.ico"'
+         (one string without right whitespaces and without left and right single quotes).
+      2. Create .o file using windress. See -h, set -F. For win32 (x32) format must be pei-i38
+         >windres -F pei-i38 6 cyclop.rc cyclop.o
+      3. After creating .o file - just compile .c-file with .o file - using gcc:
+         >gcc -m32 clop.c cyclop.o -o cyclop_win32.exe
+      ____________________________________________________________________________
+      for win64, linux, etc - maybe need to set another formats in windres.
+
+P.S.: How to make multi-icon ico-file?
+   1. Go here: https://username1565.github.io/MultiCoin-paperwallet/index_files/static/avatars/docs/index.html
+   2. Upload picture, and create square avatar with size 256x256 pixels.
+   3. Download avatar as image.
+   4. Upload this here: https://convertico.com/ and download ico-file.
+      This file is multiicon and contains 6 icons with resolutions: 16x16, 32x32, 48x48, 64x64, 128x128, 256x256.
+   5. You can check is this multiicon here: https://redketchup.io/icon/edit
+
+   ciclop multi-icon updated.
+
+	
+How I did compile .c file with icon?
+	In this case used next steps:
+	1. Create avatar 256x256. Create icon. Create cyclop.rc
+
+	2. Add this text there:
+MAINICON ICON "cyclop.ico"
+
+	3. Start "MinGW Command prompt" wint environment variables for compiler...
+
+	4. create .o using windres:
+	win32:	>windres -F pei-i386 cyclop.rc cyclop_win32.o
+	win64:	>windres -F pe-x86-64 cyclop.rc cyclop_x64.o
+	
+	5. Compile .c with .o - using gcc:
+	win32:	>gcc -m32 cyclop.c cyclop_win32.o -o cyclop_win32.exe
+	win64:	>gcc cyclop.c cyclop_x64.o -o cyclop_x86-x64.exe
+
+	And... SUCCESS! All files are here.
+	
+	Start.bat - added for win32 and win64 versions...
+
+BEST REGARDS.
+
