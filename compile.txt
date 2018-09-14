@@ -1,0 +1,7 @@
+To compile x86_64 (64bit) application for Windows, just use GCC compiler:
+   >gcc -Wall -m64 -c lopc.c -o lopc.o
+   >g++ -o lopc.exe lopc.o -O3 -m64 
+
+To compile x86 (32 bit) application use "-m32" key:
+   >gcc -Wall -m32 -c lopc.c -o lopc.o
+   >g++ -o lopc.exe lopc.o -O3 -m32
