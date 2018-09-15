@@ -646,10 +646,12 @@ int main(int argc, char** argv)
 			first_last_file = fopen(outfname_first_last, "a+");
 			//add timestamp at first, as delimiter between another blocks (if many parts generated...)
 			if(first_writting){
+				//fprintf(stderr, "\n first_writting = %d, and nulled...", first_writting);
 				first_writting = 0;
 				time_t t = time(NULL);
 				struct tm tm = *localtime(&t);
 				//add date as delimiter, to separate info, about all previous parts
+				//fprintf(stderr, "\n try to writting in %s", first_last_file);
 				fprintf(first_last_file, "\n\n    DATE AND TIME:    %d-%d-%d %d:%d:%d\n\n",
 				tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 			}
@@ -687,11 +689,13 @@ int main(int argc, char** argv)
 							
 								first_last_file = fopen(outfname_first_last, "a+");
 								if(first_writting){
+									//fprintf(stderr, "\n first_writting = %d, and nulled...", first_writting);
 									first_writting = 0;
 									//add timestamp at first, as delimiter between another blocks (if many parts generated...)
 									time_t t = time(NULL);
 									struct tm tm = *localtime(&t);
 									//add data to separate info about all previos generated parts...
+									//fprintf(stderr, "\n try to writting in %s", first_last_file);
 									fprintf(first_last_file, "\n\n    DATE AND TIME:    %d-%d-%d %d:%d:%d\n\n",
 									tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 								}
@@ -806,16 +810,18 @@ int main(int argc, char** argv)
 									)												
 							)
 					){
+						first_last_file = fopen(outfname_first_last, "a+");								//open file for adding data
 						if(first_writting){
+							//fprintf(stderr, "\n first_writting = %d, and nulled...", first_writting);
 							first_writting = 0;
 							//add timestamp at first, as delimiter between another blocks (if many parts generated...)
 							time_t t = time(NULL);
 							struct tm tm = *localtime(&t);
 							//add data to separate info about all previos generated parts...
+							//fprintf(stderr, "\n try to writting in %s", first_last_file);
 							fprintf(first_last_file, "\n\n    DATE AND TIME:    %d-%d-%d %d:%d:%d\n\n",
 							tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 						}					
-						first_last_file = fopen(outfname_first_last, "a+");								//open file for adding data
 						fprintf(first_last_file, "[%" PRIu64 ",\'%" PRIu64 " - ", suffix_int, Cur + i); //save part and first prime
 						fclose(first_last_file);														//close this file...
 
