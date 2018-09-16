@@ -361,7 +361,11 @@ void print_usage(void)
 	fprintf(stderr, "-bd [blocks delim]\tdelimiter between blocks\n\t\t\t(default '\\n' between lines)\n\n");	
 	fprintf(stderr, "-wfl\t\t\tJust check to [write first and last] prime\n\t\t\tfor each part in [filename]... (default value: disabled)\n\n");
     fprintf(stderr, "-f [size]\t\tfactoring block size\n\t\t\t(default value: %" PRIu32 ")\n\n", blockSize);
-	fprintf(stderr, "-path_to_7z [path]\tpath to 7z.exe (default value: \"7z.exe\" \n\t\t\tfrom environment variable PATH.)\n\t\t\tUse double slash in the path (like \"C:\\\\7-zip\\\\7z.exe\")\n\n");
+	fprintf(stderr, "-7z [path]\t\tUse 7z compressing on the fly or not.\n\t\t\t"
+					"In next argument you can specify the path to 7z.exe\n\t\t\t"
+					"(default path: \"7z.exe\" from environment variable PATH)\n\t\t\t"
+					"Use double slash in the path (like \"C:\\\\7-zip\\\\7z.exe\")\n\n"
+	);
 	fprintf(stderr,
 		"For delimiters -d and -bd can be used next values (one byte):\n"
         "___________________________________________________________________\n"
@@ -442,8 +446,8 @@ int main(int argc, char** argv)
     for (int i = 3; i < argc; i++) {
 		//fprintf(stderr, "%d - Now will be worked arg %s\n", i, argv[i]);
 
-        if (!strcmp(argv[i],"-path_to_7z")) {make7z = 1; continue;}
-		if (argv[i][0] != '-' && !strcmp(argv[i-1],"-path_to_7z")) {
+        if (!strcmp(argv[i],"-7z")) {make7z = 1; continue;}
+		if (argv[i][0] != '-' && !strcmp(argv[i-1],"-7z")) {
 			sprintf(path_to_7z, "%s", argv[i]);
 			continue;
 		}
