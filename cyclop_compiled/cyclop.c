@@ -72,7 +72,10 @@ char	outfname[256] = "out",
 		filename[256], //temp file name variable,
 		name_of_file[256], //this variable contains only name of file, without prefixes and suffixes...
 		outfname_first_last[256], //file name for first and last part
-		temp_for_strtok[256]; //variable to copy filename for strtok(), because function strtok modify the current string
+		temp_for_strtok[256], //variable to copy filename for strtok(), because function strtok modify the current string
+		path_to_7z[256] = "7z.exe"; //full pathway to 7z.exe. Default just "7z.exe" from environment variable "PATH"
+int		make7z = 0;
+							
 	/*
 		folder[256] = "./primes/";	//relative pathway to the working folder (unused)
 		path[256];//temp variable to save pathways
@@ -358,6 +361,7 @@ void print_usage(void)
 	fprintf(stderr, "-bd [blocks delim]\tdelimiter between blocks\n\t\t\t(default '\\n' between lines)\n\n");	
 	fprintf(stderr, "-wfl\t\t\tJust check to [write first and last] prime\n\t\t\tfor each part in [filename]... (default value: disabled)\n\n");
     fprintf(stderr, "-f [size]\t\tfactoring block size\n\t\t\t(default value: %" PRIu32 ")\n\n", blockSize);
+	fprintf(stderr, "-path_to_7z [path]\tpath to 7z.exe (default value: \"7z.exe\" \n\t\t\tfrom environment variable PATH.)\n\t\t\tUse double slash in the path (like \"C:\\\\7-zip\\\\7z.exe\")\n\n");
 	fprintf(stderr,
 		"For delimiters -d and -bd can be used next values (one byte):\n"
         "___________________________________________________________________\n"
@@ -438,6 +442,11 @@ int main(int argc, char** argv)
     for (int i = 3; i < argc; i++) {
 		//fprintf(stderr, "%d - Now will be worked arg %s\n", i, argv[i]);
 
+        if (!strcmp(argv[i],"-path_to_7z")) {make7z = 1; continue;}
+		if (argv[i][0] != '-' && !strcmp(argv[i-1],"-path_to_7z")) {
+			sprintf(path_to_7z, "%s", argv[i]);
+			continue;
+		}
         if (!strcmp(argv[i],"-p")) {progress = 1; continue;}
         if (!strcmp(argv[i],"-o")) {output = 1; continue;}
         if (argv[i][0] != '-' && !strcmp(argv[i-1],"-o")) {
@@ -706,6 +715,32 @@ int main(int argc, char** argv)
 							}
 						}
 						else if(toCnt_in_1_file==1 && !same_file){
+							fflush(fout);		//flush data into file
+							fclose(fout);		//close previous part
+
+							if(make7z){//if need to create 7z and delete txt-parts...
+							
+								printf("\npath to 7z archive - \"%s\"", path_to_7z);	//just display path
+								char command[256]; 	//define the temp variable to create and save command
+								
+								//make command
+								if(!strcmp(path_to_7z, "7z.exe")){//if string compare == 0 and path_to_7z == "7z.exe" (default value)
+									//try to using 7z from environment variable PATH
+									sprintf(command, "cmd.exe /c for %%X in (\"%s\") do 7z.exe a \"%%~nX.7z\" \"%%X\"", outfname); //create command to archive this
+								}else{ //else, using full specified pathway	for 7z.exe
+									sprintf(command, "cmd.exe /c for %%X in (\"%s\") do \"%s\" a \"%%~nX.7z\" \"%%X\"", outfname, path_to_7z); //create command to archive this
+								}
+								//printf("%s", command); //print this command for test
+								system(command); //run creating archive and wait...
+
+								sprintf(command, "cmd.exe /c for %%X in (\"%s\") do if exist \"%%~nX.7z\" del %s", outfname, outfname);
+								//create this command to delete txt part, if 7z already exists
+								//printf("%s", command); //print this command for test
+								system(command); //run command and delete file
+								
+								//continue creating next txt-part...								
+							}
+
 							suffix_int++; //increment part suffix and create new filename
 							//fprintf(stderr, "\nsuffix_int updated - %" PRIu64 "\n", suffix_int);
 							strcpy(temp_for_strtok, outfname); 	//copy outfname to temp variable
