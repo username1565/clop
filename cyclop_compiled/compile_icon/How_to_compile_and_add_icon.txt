@@ -1,10 +1,10 @@
 To compile this as win64 executable for Windows, just use GCC compiler:
-   >gcc -o clop.exe clop.c
+   >gcc -O3 -o clop.exe clop.c
 
 But in win32, x86 you can see this: https://www.computerhope.com/issues/pictures/not-a-valid-win32-application.jpg
 
 So to compile clop.c as win32 executable - just use "-m32" key:
-   >gcc -m32 -o clop.exe clop.c
+   >gcc -m32 -O3 -o clop.exe clop.c
 
 Also, I see this program have name a clop. "Клоп" in russian sounds disgustingly like a "bug", "crum".
 But programming language of this is C.
@@ -23,7 +23,7 @@ UPD2:
       2. Create .o file using windress. See -h, set -F. For win32 (x32) format must be pei-i38
          >windres -F pei-i38 6 cyclop.rc cyclop.o
       3. After creating .o file - just compile .c-file with .o file - using gcc:
-         >gcc -m32 clop.c cyclop.o -o cyclop_win32.exe
+         >gcc -m32 -O3 clop.c cyclop.o -o cyclop_win32.exe
       ____________________________________________________________________________
       for win64, linux, etc - maybe need to set another formats in windres.
 
@@ -52,8 +52,8 @@ MAINICON ICON "cyclop.ico"
 	win64:	>windres -F pe-x86-64 cyclop.rc cyclop_x64.o
 	
 	5. Compile .c with .o - using gcc:
-	win32:	>gcc -m32 cyclop.c cyclop_win32.o -o cyclop_win32.exe
-	win64:	>gcc cyclop.c cyclop_x64.o -o cyclop_x86-x64.exe
+	win32:	>gcc -m32 -O3 cyclop.c cyclop_win32.o -o cyclop_win32.exe
+	win64:	>gcc -O3 cyclop.c cyclop_x64.o -o cyclop_x86-x64.exe
 
 	And... SUCCESS! All files are here.
 	
