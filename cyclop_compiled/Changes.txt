@@ -1,3 +1,4 @@
+UPD1:
 1. Multiple parts supporting - added. Filename changing according -n value. Added separate file to write first_and_last prime list.
 2. More arguments - added. Run without arguments to see this.
 3. Added system("pause"); to prevent closing window if double click on exe.
@@ -8,3 +9,44 @@
 8. Code commented for understanding, test functions added and disabled.
 9. Delimiters - added. You can set this by char code. See "usage info".
 10. Multiicon ico-file - added. Compiled versions - added. Now this is Cyclop. C-CLOP.
+
+UPD2:
+Клоп ico and pictures - added.
+Add silently/quietly 7z packing, without messages in console. (addition option "-y > nul" for each 7z command.)
+Add dialog for set parameters if this was not specified in command line.
+Add command line generator and display this, after dialog.
+Add variables to check is argument specified or changed.
+Add function to escape characters.
+Add function to return escaped symbol.
+Add function to unescape character.
+Add second version of function for unescape (commened in code).
+Add function to check is string a number or not.
+Re-write function print-usage. Now default call for this is print_usage(0);
+Add function to change fullpath to filename of exe in argv[0] when double click on exe in windows.
+Add disabled argument for 7z to don't show dialog to enable this.
+Add supporting to write and read primes, as binary data. (*, **)
+	Write primes as 64-bit integers, without any delimieters. "-x64" option available - in command line.
+	Write primes as prime gaps. "-gaps" option in command line.
+	There is two formats for gaps:
+	1. Two bytes for each full prime gap writted in file from unsigned short int.
+		"-gaps2byte" option in command line. More compressing.
+		In this case all primes can be writted as two bytes.
+		[0000 - FFFF] = [0 - 65535] if very big range for gaps for all 64-bit prime numbers.
+		prime gap writted fully.
+	2. One bytes for each half prime gap writted in file from unsigned char (1 byte).
+		"-gaps1byte" option in command line. The best compressing.
+		In this case all primes can be writted as ONE BYTE.
+			- All gaps are even number and can be divided by 2.
+			- Many half gaps have the value lesser than 255, so can be writted as 1 byte.
+			- 00 byte never used, because 0 gap cann't be exists. So 00 byte reserved for switch from 1 byte to 2 byte.
+			- If 00 byte, then next two bytes are half prime gap as (unsigned short int - 2 bytes). All other prime gaps writted as 1 byte.
+	Add gaps and 64-bit numbers - to check_file function.
+	Now available checking this parts and append data if this not full.
+	If primes not correct there will be delimiter block as text.
+________________________________________________________________
+*	I recommend to see the binary code of this files in hex-editor, in this case, this more readable.
+	If many parts are generated and one from this sequence is deleted or incomplete,
+	program can write fully or append data only to this part.
+**	I thinking about writting the converter between lists, x64-binary data,
+	and gaps (half-gaps) parts.	This converter may convert parts from each <-> to each.
+________________________________________________________________
