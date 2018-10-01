@@ -4034,6 +4034,29 @@ int main(int argc, char** argv)
 	fprintf(stderr, "Total amount of Primes  : %" PRIu64 "\n", toCnt);
 	free_block();
 
+	//pack last archive in the end, if need pack this.
+	if(make7z){//if need to create 7z and delete txt-parts...
+		//printf("\npath to 7z archive - \"%s\"", path_to_7z);	//just display path
+		char command[256]; 	//define the temp variable to create and save command
+
+		//make command
+		if(!strcmp(path_to_7z, "7z.exe")){//if string compare == 0 and path_to_7z == "7z.exe" (default value)
+			//try to using 7z from environment variable PATH
+			sprintf(command, "cmd.exe /c for %%X in (\"%s\") do 7z.exe a \"%%~nX.7z\" \"%%X\" -y > nul", outfname); //create command to archive this
+		}else{ //else, using full specified pathway	for 7z.exe
+			sprintf(command, "cmd.exe /c for %%X in (\"%s\") do \"%s\" a \"%%~nX.7z\" \"%%X\" -y > nul", outfname, path_to_7z); //create command to archive this
+		}
+		//printf("%s", command); //print this command for test
+		system(command); //run creating archive and wait...
+
+		sprintf(command, "cmd.exe /c for %%X in (\"%s\") do if exist \"%%~nX.7z\" del %s -y > nul", outfname, outfname);
+		//create this command to delete txt part, if 7z already exists
+		//printf("%s", command); //print this command for test
+		system(command); //run command and delete file
+
+		//continue creating next txt-part...
+	}
+
 	printf("\n\nWork finished...\n");
 
 	//printf("system_pause 10\n");
